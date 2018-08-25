@@ -5,7 +5,7 @@ from core import app
 from hrms import proj
 
 
-@app.route('/fortune/healthcheck')
+@app.route('/health')
 def fortune_healthcheck():
     return "ok"
 
