@@ -11,6 +11,8 @@ class OnlineConfig(Config):
     DEBUG = False
     SQLALCHEMY_ECHO = False
 
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@127.0.0.1:3306/hrms'
+
     SQLALCHEMY_BINDS = {
         'hrms': 'mysql://%s:%s@%s:3306/hrmsdb' % (HRMS_DB_USER_NAME, HRMS_DB_IP, HRMS_DB_PASSWORD)
     }
