@@ -64,6 +64,5 @@ tags
 *.swp
 uploads/
 
-core/configs/config_local.py
 
 test/test_for_dora.py

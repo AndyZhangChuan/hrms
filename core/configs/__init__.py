@@ -1,12 +1,12 @@
 __author__ = 'zhangchuan'
 
 import os
+from core.configs.config_online import OnlineConfig
+from core.configs.config_local import DevConfig
 
-try:
-    from core.configs.config_local import DevConfig as Config
-except ImportError:
-    from core.configs.config_default import Config
-
-config = Config()
+if os.getenv('APP_ENV', 'LOCAL') == 'ONLINE':
+    config = OnlineConfig()
+else:
+    config = DevConfig()
 
 config.APP_ENV = os.getenv('APP_ENV', 'LOCAL')
