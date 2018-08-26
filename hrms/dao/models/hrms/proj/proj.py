@@ -8,9 +8,9 @@ class Proj(db.Model):
     __bind_key__ = 'hrms'
     __table_args__ = {"mysql_engine": "InnoDB", "mysql_charset": "utf8"}
 
-    id = db.Column(db.BigInteger, primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     proj_name = db.Column(db.String(64), default='', nullable=False)  # 项目名称
-    company_id = db.Column(db.BigInteger, default=0)  # 所属公司编号
+    company_id = db.Column(db.Integer, default=0)  # 所属公司编号
     address = db.Column(db.String(128), default='', nullable=False)  # 地址
     crew_num = db.Column(db.Integer, default=0)  # 所需员工数量
     start_time = db.Column(db.Integer, default=0)  # 开始时间
