@@ -1,5 +1,5 @@
 # -*- encoding: utf8 -*-
-from ..db_manager import DBManager
+from hrms.dao.manager.db_manager import DBManager
 from hrms.dao.models.hrms.company import Company
 
 

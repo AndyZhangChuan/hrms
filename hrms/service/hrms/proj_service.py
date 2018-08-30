@@ -1,11 +1,12 @@
 # -*- encoding: utf8 -*-
+from flask import request
 
-from hrms.dao.manager.hrms.proj import ProjMgr
+from core.framework.plugin import execute_proj_plugin
+from hrms.dao.manager.hrms.proj import ProjMgr, ProjPluginMgr
 from hrms.dao.manager.hrms.proj import ProjPicMgr
 from hrms.dao.manager.hrms.proj import ProjOpLogMgr
-from hrms.dao.manager.hrms import CompanyMgr
-from hrms.commons.constant import proj_constant
-from hrms.commons.utils import page_util
+from hrms.commons.constant import proj_constant, proj_nodes
+from hrms.commons.utils import page_util, to_dict
 
 
 def create_proj(operator_id, form):
@@ -104,9 +105,29 @@ def get_proj_list(page):
                                      filter_func=__proj_mapper, order_by_list=order_by_list)
 
 
+def get_proj_plugins_by_company(page, company_id):
+    order_by_list = [ProjMgr.model.id.desc()]
+    expressions = [ProjMgr.model.is_del == 0, ProjMgr.model.company_id == company_id]
+    return page_util.get_page_result(ProjMgr.model, page=page,  expressions=expressions, page_size=10,
+                                     filter_func=__proj_plugins_mapper, order_by_list=order_by_list)
+
+
+def update_proj_plugin(params):
+    plugin = ProjPluginMgr.query_first(filter_conditions={'proj_id': params['proj_id'], 'plugin_id': params['plugin_id'], 'is_del': 0})
+    if plugin:
+        if params['is_del'] == 0:
+            ProjPluginMgr.update(plugin, props=params['props'])
+        else:
+            ProjPluginMgr.delete(plugin)
+    else:
+        ProjPluginMgr.create(proj_id=params['proj_id'], plugin_name=params['plugin_name'], plugin_id=params['plugin_id'], props=params['props'])
+
+    return to_dict(ProjPluginMgr.query(filter_conditions={'proj_id': params['proj_id'], 'is_del': 0}))
+
+
 def __proj_mapper(proj, biz_context):
     '''
-    result:[{"company_id": 1, "company_name: "明星人力资源公司", "address": "浦东南路", "proj_name": "",
+    result:[{"company_id": 1, "address": "浦东南路", "proj_name": "",
     "crew_num": 100, "description": "", "work_crew_num": 90, "current_month_income": 480001331, "message_count": 6}],
     :param proj:
     :return:
@@ -115,30 +136,35 @@ def __proj_mapper(proj, biz_context):
     item = dict()
     item['proj_id'] = proj.id
     item['company_id'] = proj.company_id
-    item['company_name'] = __get_company_name_by_id(proj.company_id, biz_context)
     item['address'] = proj.address
     item['proj_name'] = proj.proj_name
     item['crew_num'] = proj.crew_num
     item['description'] = proj.description
     # TODO
-    item['work_crew_num'] = 0
-    item['current_month_income'] = 0
-    item['message_count'] = 0
+    execute_result = execute_proj_plugin(proj.id, proj_nodes.PROJ_ON_ATTRIBUTES, request.form, item)
+    if execute_result['status'] != 'ok':
+        return execute_result['data']
+    else:
+        return item
+
+
+def __proj_plugins_mapper(proj, biz_context):
+    '''
+    result:[{"company_id": 1, "address": "浦东南路", "proj_name": "",
+    "crew_num": 100, "description": "", "work_crew_num": 90, "current_month_income": 480001331, "message_count": 6}],
+    :param proj:
+    :return:
+    '''
+
+    item = dict()
+    item['proj_id'] = proj.id
+    item['company_id'] = proj.company_id
+    item['address'] = proj.address
+    item['proj_name'] = proj.proj_name
+    item['crew_num'] = proj.crew_num
+    item['description'] = proj.description
+    item['plugins'] = __get_plugins_by_proj_id(proj.id)
     return item
-
-
-def __get_company_name_by_id(company_id, biz_context):
-    company_data = biz_context['cache_data'].get('company', None)
-    if company_data:
-        return company_data[company_id].company_name if company_data.get(company_id) else ''
-
-    company_data = dict()
-    company_ids = list(set([item.company_id for item in biz_context['result_list']]))
-    companies = CompanyMgr.get_companies_by_ids(company_ids)
-    for company in companies:
-        company_data = company
-    biz_context['cache_data']['company'] = company_data
-    return company_data[company_id].company_name if company_data.get(company_id) else ''
 
 
 def __add_proj_op_log(operator_id, proj_id, op_type, memo, from_status, to_status):
@@ -154,3 +180,6 @@ def __add_proj_op_log(operator_id, proj_id, op_type, memo, from_status, to_statu
     ProjOpLogMgr.create(**op_params)
 
 
+def __get_plugins_by_proj_id(proj_id):
+    plugins = ProjPluginMgr.query({'proj_id': proj_id, 'is_del': 0})
+    return to_dict(plugins)
