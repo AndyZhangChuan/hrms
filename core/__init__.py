@@ -11,7 +11,8 @@ from configs import config
 from core.db.router import AutoRouteSQLAlchemy
 from core.dapper.intercept import XB3HTTPAdapter
 from core.log import getLogger
-
+reload(sys)
+sys.setdefaultencoding('utf8')
 log = getLogger("hrms")
 
 
@@ -77,5 +78,16 @@ config_file_uploads()
 
 # init file handler
 init_file_handler()
+
+
+from inspect import getmembers, isclass
+from hrms import plugins
+
+plugin_pool = {}
+members = getmembers(plugins)
+for member in members:
+    if isclass(member[1]):
+        plugin_pool[member[0]] = member[1]
+
 
 log.info("project init done")
