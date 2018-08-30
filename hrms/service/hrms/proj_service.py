@@ -5,8 +5,11 @@ from core.framework.plugin import execute_proj_plugin
 from hrms.dao.manager.hrms.proj import ProjMgr, ProjPluginMgr
 from hrms.dao.manager.hrms.proj import ProjPicMgr
 from hrms.dao.manager.hrms.proj import ProjOpLogMgr
-from hrms.commons.constant import proj_constant, proj_nodes
-from hrms.commons.utils import page_util, to_dict
+from hrms.dao.manager.hrms import CompanyMgr
+from hrms.commons.constant import proj_constant
+from hrms.commons.utils import page_util
+import time
+
 
 
 def create_proj(operator_id, form):
@@ -90,7 +93,14 @@ def change_proj_status(operator_id, form):
     from_status = proj.proj_status
     if proj is None:
         return dict(status='error', msg='要更改的项目不存在')
-    ProjMgr.update(proj, proj_status=proj_status)
+
+    params = {'proj_status': proj_status}
+    if proj_status == proj_constant.PROJ_STATUS_WORKING:
+        params['start_time'] = int(time.time())
+    elif proj_status == proj_constant.PROJ_STATUS_END:
+        params['end_time'] = int(time.time())
+
+    ProjMgr.update(proj, **params)
 
     __add_proj_op_log(operator_id, proj_id, proj_constant.PROJ_OP_TYPE_CHANGE_STATUS, '更改项目状态',
                       from_status=from_status, to_status=proj_status)
