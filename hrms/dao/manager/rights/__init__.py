@@ -1,0 +1,15 @@
+from manager_manager import ManagerManager
+from user_proj_rights_map_manager import UserProjRightsMapManager
+from user_rights_resource_manager import UserRightsResourceManager
+from user_rights_role_manager import UserRightsRoleManager
+from user_rights_role_map_manager import UserRightsRoleMapManager
+from user_role_rights_resource_map_manager import UserRoleRightsResourceMapManager
+from user_token_manager import UserTokenManager
+
+ManagerMgr = ManagerManager()
+UserProjRightsMapMgr = UserProjRightsMapManager()
+UserRightsResourceMgr = UserRightsResourceManager()
+UserRightsRoleMgr = UserRightsRoleManager()
+UserRightsRoleMapMgr = UserRightsRoleMapManager()
+UserRoleRightsResourceMapMgr = UserRoleRightsResourceMapManager()
+UserTokenMgr = UserTokenManager()
