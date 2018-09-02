@@ -6,10 +6,10 @@ class DevConfig(Config):
     DEBUG = False
     SQLALCHEMY_ECHO = False
 
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:a123456a@127.0.0.1:3306/hrms'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@127.0.0.1:3306/hrms'
     SECRET_KEY = "test"
     SQLALCHEMY_BINDS = {
-        'hrms': 'mysql://root:a123456a@127.0.0.1:3306/hrms',
-        'hrms_slave': 'mysql://root:a123456a@127.0.0.1:3306/hrms'
+        'hrms': 'mysql://root:123456@127.0.0.1:3306/hrms',
+        'hrms_slave': 'mysql://root:123456@127.0.0.1:3306/hrms'
     }
 

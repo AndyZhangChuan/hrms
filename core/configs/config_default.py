@@ -11,9 +11,9 @@ class Config:
 
     __APP_NAME__ = 'hrms'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    TEMPLATE_FOLDER = root_path + 'hrms/resource/templates'
-    STATIC_FOLDER = root_path + 'hrms/resource/static'
-    UPLOADED_IMAGES_DEST = root_path + 'hrms/resource/uploads'
+    TEMPLATE_FOLDER = root_path + 'resource/templates'
+    STATIC_FOLDER = root_path + 'resource/static'
+    UPLOADED_IMAGES_DEST = root_path + 'resource/uploads'
 
     SQL_PRINT_RATIO = 0
 

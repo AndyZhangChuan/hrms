@@ -3,9 +3,9 @@
 from core import app
 from flask import jsonify
 from flask import request
-from hrms.forms.hrms.proj import ProjUpdateForm, ProjStatusChangeForm
-from hrms.service.hrms import proj_service
-from hrms.commons.utils import web_util
+from hrms.forms.proj import ProjUpdateForm, ProjStatusChangeForm
+from hrms.service import proj_service
+from commons.utils import web_util
 
 
 @app.route("/proj", methods=['POST'])

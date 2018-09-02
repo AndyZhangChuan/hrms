@@ -1,7 +1,7 @@
 # -*- encoding: utf8 -*-
 
-from hrms.dao.manager.cms import CompanyMgr
-from hrms.commons.utils import page_util
+from hrms.dao.manager import CompanyMgr
+from commons.utils import page_util
 
 
 def get_company_list(page):

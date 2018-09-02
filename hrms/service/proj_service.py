@@ -2,14 +2,14 @@
 from flask import request
 
 from core.framework.plugin import execute_proj_plugin
-from hrms.dao.manager.hrms.proj import ProjMgr, ProjPluginMgr
-from hrms.dao.manager.hrms.proj import ProjPicMgr
-from hrms.dao.manager.hrms.proj import ProjOpLogMgr
-from hrms.dao.manager.hrms import CompanyMgr
+from hrms.dao.manager.proj import ProjMgr, ProjPluginMgr
+from hrms.dao.manager.proj import ProjPicMgr
+from hrms.dao.manager.proj import ProjOpLogMgr
 from hrms.commons.constant import proj_constant
-from hrms.commons.utils import page_util
+from hrms.commons.constant import proj_nodes
+from commons.utils import page_util
+from commons.utils import to_dict
 import time
-
 
 
 def create_proj(operator_id, form):

@@ -1,8 +1,8 @@
 # -*- encoding: utf8 -*-
-from hrms.commons.exception import ValidationError
+from commons.exception import ValidationError
 from hrms.plugins.plugin import Props
 
-from flask import request, jsonify
+from flask import jsonify
 from core import app
 from inspect import getmembers, isclass
 from hrms import plugins

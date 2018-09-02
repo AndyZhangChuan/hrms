@@ -2,7 +2,7 @@
 from core import app, db
 import math
 from sqlalchemy import func
-from hrms.commons.utils import to_dict
+from commons.utils import to_dict
 
 
 def get_page_result(model, page=1, page_size=10, expressions=list(), order_by_list=list(), filter_func=None):

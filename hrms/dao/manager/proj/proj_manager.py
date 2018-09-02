@@ -1,6 +1,6 @@
 # -*- encoding: utf8 -*-
-from ...db_manager import DBManager
-from hrms.dao.models.hrms.proj.proj import Proj
+from commons.helper.db_manager import DBManager
+from hrms.dao.models.proj.proj import Proj
 
 
 class ProjManager(DBManager):

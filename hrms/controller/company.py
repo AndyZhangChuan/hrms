@@ -3,8 +3,8 @@
 from core import app
 from flask import jsonify
 from flask import request
-from hrms.service.cms import company_service
-from hrms.service.hrms import proj_service
+from hrms.service import company_service
+from hrms.service import proj_service
 
 
 @app.route("/company", methods=['GET'])

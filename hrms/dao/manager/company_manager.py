@@ -1,6 +1,6 @@
 # -*- encoding: utf8 -*-
-from hrms.dao.manager.db_manager import DBManager
-from hrms.dao.models.hrms.company import Company
+from commons.helper.db_manager import DBManager
+from hrms.dao.models.company import Company
 
 
 class CompanyManager(DBManager):

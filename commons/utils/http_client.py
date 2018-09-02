@@ -1,6 +1,6 @@
 # -*- encoding: utf8 -*-
-from hrms.commons.exception import NetWorkError
-from hrms.commons.helper import concurrent_helper
+from commons.exception import NetWorkError
+from commons.helper import concurrent_helper
 
 import time
 import traceback
