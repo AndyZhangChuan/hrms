@@ -3,8 +3,8 @@ import json
 from inspect import getmembers
 
 from core import plugin_pool
-from hrms.commons.exception import ValidationError
-from hrms.dao.models.hrms.proj.proj_plugin import ProjPlugin
+from commons.exception import ValidationError
+from hrms.dao.models.proj.proj_plugin import ProjPlugin
 from hrms.plugins.plugin import Props
 
 
