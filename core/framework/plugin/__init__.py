@@ -4,8 +4,8 @@ from inspect import getmembers
 
 from core import plugin_pool
 from commons.exception import ValidationError
-from hrms.dao.models.proj.proj_plugin import ProjPlugin
-from hrms.plugins.plugin import Props
+from dao.models.proj import ProjPlugin
+from plugins import Props
 
 
 def execute_proj_plugin(proj_id, method, form, data):
