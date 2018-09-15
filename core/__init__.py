@@ -81,7 +81,7 @@ init_file_handler()
 
 
 from inspect import getmembers, isclass
-from hrms import plugins
+import plugins
 
 plugin_pool = {}
 members = getmembers(plugins)
