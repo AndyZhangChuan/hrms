@@ -1,6 +1,6 @@
 # -*- encoding: utf8 -*-
 from commons.helper.db_manager import DBManager
-from dao.models.rights import UserProjRightsMap
+from dao.models.rights.user_proj_rights_map import UserProjRightsMap
 
 
 class UserProjRightsMapManager(DBManager):
