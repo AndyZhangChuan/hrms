@@ -1,6 +1,6 @@
 # -*- encoding: utf8 -*-
 from commons.exception import ValidationError
-from plugins import Props
+from plugins.plugin import Props
 
 from flask import jsonify
 from core import app

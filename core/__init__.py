@@ -5,8 +5,9 @@ import sys
 
 import requests
 from flask import Flask
-from flask.ext.uploads import UploadSet, configure_uploads
 from flask_debugtoolbar import DebugToolbarExtension
+from flaskext.uploads import UploadSet, configure_uploads
+
 from configs import config
 from core.db.router import AutoRouteSQLAlchemy
 from core.dapper.intercept import XB3HTTPAdapter

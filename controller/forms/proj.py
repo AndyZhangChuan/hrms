@@ -1,4 +1,4 @@
-from controller.forms import BaseForm
+from controller.forms.base_form import BaseForm
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired, Optional
 

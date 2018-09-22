@@ -1,6 +1,6 @@
 # -*- encoding: utf8 -*-
 from commons.helper.db_manager import DBManager
-from dao.models.proj import Proj
+from dao.models.proj.proj import Proj
 
 
 class ProjManager(DBManager):

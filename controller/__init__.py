@@ -1,7 +1,7 @@
 from core import app
 
-from flask_cors import CORS
-CORS(app, supports_credentials=True)
+import hrms
+import cms
 
 
 @app.route('/health')

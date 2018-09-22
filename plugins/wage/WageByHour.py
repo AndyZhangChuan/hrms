@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from plugins import Plugin, Props, Output
+from plugins.plugin import Plugin, Props, Output
 from service.constant import proj_nodes as constants
 
 
