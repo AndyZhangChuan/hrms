@@ -3,7 +3,7 @@
 from core import app
 from flask import jsonify
 from flask import request
-from controller.forms import ProjUpdateForm, ProjStatusChangeForm
+from controller.forms.proj import ProjUpdateForm, ProjStatusChangeForm
 from service import proj_service
 from commons.utils import web_util
 

@@ -40,3 +40,18 @@ def to_dict(o, extend_columns=None):
             return dict
         except:
             return None
+
+
+def load_simplified_json(text):
+    if ',' not in text:
+        return [text]
+    elif ':' in text:
+        item_list = text.split(',')
+        obj = []
+        for item in item_list:
+            if ':' in text:
+                key_value = item.split(':')
+                obj.append({key_value[0]: key_value[1]})
+        return obj
+    else:
+        return text.split(',')
