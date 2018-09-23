@@ -15,3 +15,7 @@ class ProjManager(DBManager):
         if proj is None:
             return None
         return self.update(proj, **params)
+
+    def get_proj_by_ids(self, proj_ids):
+        expressions = [self.model.id.in_(proj_ids)]
+        return self.query(expressions=expressions)
