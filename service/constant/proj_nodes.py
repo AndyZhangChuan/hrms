@@ -20,3 +20,10 @@ FINE_DATA_ADD = 'fine_data_add'
 
 FINE_DATA_OUTPUT = 'fine_data_output'
 FINE_DATA_UPDATE = 'fine_data_update'
+
+#fine
+CREW_DATA_INPUT = 'crew_data_input'
+CREW_DATA_ADD = 'crew_data_add'
+
+CREW_DATA_OUTPUT = 'crew_data_output'
+CREW_DATA_UPDATE = 'crew_data_update'
