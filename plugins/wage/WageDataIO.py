@@ -2,8 +2,10 @@
 import collections
 import json
 
+from commons.exception import BatchUploadError
+from commons.helper import string_configure_helper
 from commons.utils import time_util, to_dict
-from dao.manager import WageMgr
+from dao.manager import WageMgr, CrewMgr
 from plugins.plugin import Plugin, Output, Props
 from service.constant import proj_nodes as constants
 
@@ -37,52 +39,34 @@ class WageDataIO(Plugin):
     def wage_data_add(props, form, data):
         input_format = props['input_format']
         records = []
+        line_index = 0
         for line in data['lines']:
+            line_index += 1
             record = {'proj_id': data['proj_id'],'meta': {}}
-            for item in input_format.split(','):
-                if '|' in item:
-                    pair = item.split('|')
-                    record[pair[1]] = line[pair[0]] if pair[0] in line else None
-                else:
-                    record['meta'][item] = line[item]
+            string_configure_helper.load(input_format, line, record)
             if 'wage_time' in record:
                 record['wage_time'] = time_util.dateString2timestampCommon(record['wage_time'])
+            crew_id = CrewMgr.get_crew_id_by_account(record['crew_account'])
+            if not crew_id:
+                data['errors'].append(BatchUploadError(line_index, line, '该员工没有录入系统').to_dict())
+                continue
+            else:
+                record['crew_id'] = crew_id
             records.append(record)
         data['records'] = records
         return Output(Output.OK, content=data)
 
     @staticmethod
     def wage_data_output(props, form, data):
-        output_format = props['output_format']
         data['display_format'] = props['display_format']
-        page = data['page']
-        filters = data['filters']
-        filter_condition = {'is_del': 0}
-        expressions = []
-        if 0 < filters['startTime'] < filters['endTime']:
-            expressions = [WageMgr.model.wage_time > filters['startTime'], WageMgr.model.wage_time < filters['endTime']]
-
-        data['count'] = WageMgr.count(expressions=expressions, filter_conditions=filter_condition)
-        if page != 0:
-            records = WageMgr.query(expressions=expressions, filter_conditions=filter_condition, limit=10, offset=(page-1)*10, order_list=[WageMgr.model.wage_time.desc()])
-        else:
-            if data['count'] > 5000:  # 数据量过大保护
-                records = WageMgr.query(expressions=expressions, filter_conditions=filter_condition, limit=5000, order_list=[WageMgr.model.wage_time.desc()])
-            else:
-                records = WageMgr.query(expressions=expressions, filter_conditions=filter_condition)
         data['result'] = []
-        for record in records:
+        for record in data['records']:
             record = to_dict(record)
+            base_info = CrewMgr.get_crew_base_info_by_id(record['crew_id'])
+            record = dict(record, **base_info)
             record['wage_time'] = time_util.timestamp2dateString(record['wage_time'])
             line = collections.OrderedDict()
-            for item in output_format.split(','):
-                if '|' in item:
-                    pair = item.split('|')
-                    line[pair[0]] = record[pair[1]] if pair[1] in record else None
-            if record['meta']:
-                meta = json.loads(record['meta'], object_pairs_hook=collections.OrderedDict)
-                for key in meta:
-                    line[key] = meta[key]
+            string_configure_helper.explain(props['output_format'], record, line)
             data['result'].append(line)
         return Output(Output.OK, content=data)
 

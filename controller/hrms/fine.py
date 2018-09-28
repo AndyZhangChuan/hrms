@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+import traceback
 
 from flask import jsonify, request
 
@@ -26,9 +27,10 @@ def create_fine_record():
     try:
         proj_id = int(request.form.get("proj_id", 0))
         lines = request.form.get("lines", None)
-        fine_service.create_fine_record(proj_id, json.loads(lines))
-        return jsonify(status='ok')
+        result = fine_service.create_fine_record(proj_id, json.loads(lines))
+        return jsonify(**result)
     except Exception, ex:
+        traceback.print_exc()
         return jsonify(status='error', msg=ex.message)
 
 
@@ -42,8 +44,8 @@ def get_fine_record():
         filters = json.loads(request.args.get('filters', '[]'))
         proj_id = request.args.get('proj_id')
         page = int(request.args.get('page'))
-        data = fine_service.get_fine_records(proj_id, page, filters)
-        return jsonify(status='ok', content=data)
+        result = fine_service.get_fine_records(proj_id, page, filters)
+        return jsonify(**result)
     except Exception, ex:
         return jsonify(status='error', msg=ex.message)
 

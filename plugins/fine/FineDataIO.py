@@ -2,8 +2,10 @@
 import collections
 import json
 
+from commons.exception import BatchUploadError
+from commons.helper import string_configure_helper
 from commons.utils import time_util, to_dict
-from dao.manager import FineMgr
+from dao.manager import FineMgr, CrewMgr
 from plugins.plugin import Plugin, Output, Props
 from service.constant import proj_nodes as constants
 
@@ -36,52 +38,35 @@ class FineDataIO(Plugin):
     @staticmethod
     def fine_data_add(props, form, data):
         input_format = props['input_format']
+        line_index = 0
         for line in data['lines']:
-            record = {'proj_id': data['proj_id'],'meta': {}}
-            for item in input_format.split(','):
-                if '|' in item:
-                    pair = item.split('|')
-                    record[pair[1]] = line[pair[0]] if pair[0] in line else None
-                else:
-                    record['meta'][item] = line[item]
+            line_index += 1
+            for key, value in line.items():
+                line[key] = value.strip()
+            record = string_configure_helper.load(input_format, line, {'proj_id': data['proj_id'],'meta': {}})
             if 'occur_time' in record:
                 record['occur_time'] = time_util.dateString2timestampCommon(record['occur_time'])
+            crew_id = CrewMgr.get_crew_id_by_account(record['crew_account'])
+            if not crew_id:
+                data['errors'].append(BatchUploadError(line_index, line, '该员工没有录入系统').to_dict())
+                continue
+            else:
+                record['crew_id'] = crew_id
             record['meta'] = json.dumps(record['meta'])
             FineMgr.create_override_if_exist(record)
         return Output(Output.OK, content=data)
 
     @staticmethod
     def fine_data_output(props, form, data):
-        output_format = props['output_format']
         data['display_format'] = props['display_format']
-        page = data['page']
-        filters = data['filters']
-        filter_condition = {'is_del': 0}
-        expressions = []
-        if 0 < filters['startTime'] < filters['endTime']:
-            expressions = [FineMgr.model.occur_time > filters['startTime'], FineMgr.model.occur_time < filters['endTime']]
-
-        data['count'] = FineMgr.count(expressions=expressions, filter_conditions=filter_condition)
-        if page != 0:
-            records = FineMgr.query(expressions=expressions, filter_conditions=filter_condition, limit=10, offset=(page-1)*10, order_list=[FineMgr.model.occur_time.desc()])
-        else:
-            if data['count'] > 5000: # 数据量过大保护
-                records = FineMgr.query(expressions=expressions, filter_conditions=filter_condition, limit=5000, order_list=[FineMgr.model.occur_time.desc()])
-            else:
-                records = FineMgr.query(expressions=expressions, filter_conditions=filter_condition)
         data['result'] = []
-        for record in records:
+        for record in data['records']:
             record = to_dict(record)
+            base_info = CrewMgr.get_crew_base_info_by_id(record['crew_id'])
+            record = dict(record, **base_info)
             record['occur_time'] = time_util.timestamp2dateString(record['occur_time'])
             line = collections.OrderedDict()
-            for item in output_format.split(','):
-                if '|' in item:
-                    pair = item.split('|')
-                    line[pair[0]] = record[pair[1]] if pair[1] in record else None
-            if record['meta']:
-                meta = json.loads(record['meta'])
-                for key in meta:
-                    line[key] = meta[key]
+            string_configure_helper.explain(props['output_format'], record, line)
             data['result'].append(line)
         data['result'] = json.dumps(data['result'])
         return Output(Output.OK, content=data)

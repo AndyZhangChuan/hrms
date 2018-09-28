@@ -10,7 +10,6 @@ class CrewLevel(db.Model):
 
     id = db.Column(db.BigInteger, primary_key=True, nullable=False, autoincrement=True)
     crew_id = db.Column(db.BigInteger, default=0, nullable=False)  # 员工帐号
-    crew_name = db.Column(db.String(128), default='', nullable=False)  # 员工姓名
     level = db.Column(db.Integer, default=0)  # 员工手机号
     level_name = db.Column(db.String(128), default='', nullable=False)  # 身份证号
     accumulate_work_days = db.Column(db.Integer, default=0)  # 累计工作天数

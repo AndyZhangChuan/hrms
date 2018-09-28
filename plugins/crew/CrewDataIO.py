@@ -2,8 +2,8 @@
 import collections
 import json
 
-from sqlalchemy import or_
-
+from commons.exception import BatchUploadError
+from commons.helper import string_configure_helper
 from commons.utils import time_util, to_dict
 from dao.manager import CrewMgr
 from plugins.plugin import Plugin, Output, Props
@@ -37,69 +37,32 @@ class CrewDataIO(Plugin):
 
     @staticmethod
     def crew_data_add(props, form, data):
-        input_format = props['input_format']
         records = []
+        line_index = 0
         for line in data['lines']:
+            line_index += 1
             record = {'proj_id': data['proj_id'],'meta': {}}
-            for item in input_format.split(','):
-                if '|' in item:
-                    pair = item.split('|')
-                    record[pair[1]] = line[pair[0]] if pair[0] in line else None
-                else:
-                    record['meta'][item] = line[item]
+            string_configure_helper.load(props['input_format'], line, record)
             record['id_card_num'] = record['id_card_num'].lower()
             record['meta'] = json.dumps(record['meta'])
+            record['crew_id'] = line['crew_id'] if 'crew_id' in line else ''
             crew = CrewMgr.create_override_if_exist(record)
             record['crew_id'] = crew.id
+            # data['errors'].append(BatchUploadError(line_index, line, '该员工没有录入系统').to_dict())
             records.append(record)
         data['records'] = records
         return Output(Output.OK, content=data)
 
     @staticmethod
     def crew_data_output(props, form, data):
-        output_format = props['output_format']
         data['display_format'] = props['display_format']
-        page = data['page']
-        filters = data['filters']
-        filter_condition = {'is_del': 0}
-        expressions = []
-        search_key = filters['searchKey']
-        if search_key:
-            expressions = [or_(CrewMgr.model.crew_name == search_key, CrewMgr.model.phone == search_key, CrewMgr.model.id_card_num == search_key, CrewMgr.model.crew_account == search_key)]
-
-        data['count'] = CrewMgr.count(expressions=expressions, filter_conditions=filter_condition)
-        if page != 0:
-            records = CrewMgr.query(expressions=expressions, filter_conditions=filter_condition, limit=10, offset=(page-1)*10, order_list=[CrewMgr.model.create_time.desc()])
-        else:
-            if data['count'] > 5000: # 数据量过大保护
-                records = CrewMgr.query(expressions=expressions, filter_conditions=filter_condition, limit=5000, order_list=[CrewMgr.model.create_time.desc()])
-            else:
-                records = CrewMgr.query(expressions=expressions, filter_conditions=filter_condition)
         data['result'] = []
-        for record in records:
+        for record in data['records']:
             record = to_dict(record)
             record['create_time'] = time_util.timestamp2dateString(record['create_time'])
             record['source'] = CrewMgr.translate_source(record['source'])
             record['work_status'] = CrewMgr.translate_work_status(record['work_status'])
             line = collections.OrderedDict()
-            for item in output_format.split(','):
-                line['id'] = record['id']
-                if '|' in item:
-                    pair = item.split('|')
-                    line[pair[0]] = record[pair[1]] if pair[1] in record else None
-            if record['meta']:
-                meta = json.loads(record['meta'])
-                for key in meta:
-                    line[key] = meta[key]
+            string_configure_helper.explain(props['output_format'], record, line)
             data['result'].append(line)
-        return Output(Output.OK, content=data)
-
-    @staticmethod
-    def crew_data_update(props, form, data):
-        crew_id = data['crew_id']
-        record = CrewMgr.query_first(
-            filter_conditions={'id': crew_id, 'is_del': 0}
-        )
-        if record:
-            CrewMgr.delete(record)
         return Output(Output.OK, content=data)

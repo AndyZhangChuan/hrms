@@ -10,9 +10,8 @@ class Wage(db.Model):
 
     id = db.Column(db.BigInteger, primary_key=True, nullable=False, autoincrement=True)
     proj_id = db.Column(db.Integer, default=0)  # 项目编号
-    crew_account = db.Column(db.String(128), default='', nullable=False)  # 员工帐号
-    crew_name = db.Column(db.String(128), default='', nullable=False)  # 员工姓名
-    bus_id = db.Column(db.String(128), default='', nullable=False)  # 业务id
+    crew_id = db.Column(db.Integer, default=0)  # 项目编号
+    bill_id = db.Column(db.String(128), default='', nullable=False)  # 业务id
     amount                = db.Column(db.DECIMAL(precision=10, scale=2), default=0.00)     #返现
     wage_status = db.Column(db.SmallInteger, default=0) #奖励状态 0-初始 2-已确认 4-可提现 -1-已取消 -2-异常
     meta = db.Column(db.String(512, collation='utf8_unicode_ci'), default='')  # 收入备注

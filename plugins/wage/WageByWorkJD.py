@@ -37,7 +37,7 @@ class WageByWorkJD(Plugin):
             total_amount = 0
             wage_meta = collections.OrderedDict()
             wage_meta['工作时长'] = record['work_hours']
-            bus_id = '%s%s%s' % (record['proj_id'], record['crew_account'], record['wage_time'])
+            bill_id = '%s%s%s' % (record['proj_id'], record['crew_id'], record['wage_time'])
 
             jh_amount = float(line[u'拣货件数']) if u'拣货件数' in line and line[u'拣货件数'] else 0
             fh_amount = float(line[u'复核件数']) if u'复核件数' in line and line[u'复核件数'] else 0
@@ -62,24 +62,24 @@ class WageByWorkJD(Plugin):
             wage_meta['打包非一体化达标效率'] = round(fyth_amount / fyth_standard, 2)
 
             if jh_amount > 0:
-                raw_item = set_raw_item(record, '拣货', bus_id, jh_amount)
+                raw_item = set_raw_item(record, '拣货', bill_id, jh_amount)
                 data['wage_raw_datas'].append(raw_item)
                 total_amount += jh_amount * props['jh_price']
             if fh_amount > 0:
-                raw_item = set_raw_item(record, '复核', bus_id, fh_amount)
+                raw_item = set_raw_item(record, '复核', bill_id, fh_amount)
                 data['wage_raw_datas'].append(raw_item)
                 total_amount += fh_amount * props['fh_price']
             if yth_amount > 0:
-                raw_item = set_raw_item(record, '打包一体化', bus_id, yth_amount)
+                raw_item = set_raw_item(record, '打包一体化', bill_id, yth_amount)
                 data['wage_raw_datas'].append(raw_item)
                 total_amount += yth_amount * props['yth_price']
             if fyth_amount > 0:
-                raw_item = set_raw_item(record, '打包非一体化', bus_id, fyth_amount)
+                raw_item = set_raw_item(record, '打包非一体化', bill_id, fyth_amount)
                 data['wage_raw_datas'].append(raw_item)
                 total_amount += fyth_amount * props['fyth_price']
 
             wage = record.copy()
-            wage['bus_id'] = bus_id
+            wage['bill_id'] = bill_id
             wage['amount'] = total_amount
             wage['meta'] = wage_meta
             wage['confirm_time'] = time.time()
@@ -88,10 +88,10 @@ class WageByWorkJD(Plugin):
         return Output(Output.OK, content=data)
 
 
-def set_raw_item(line, position, bus_id, amount):
+def set_raw_item(line, position, bill_id, amount):
     raw_item = line.copy()
     raw_item['position'] = position
-    raw_item['bus_id'] = bus_id
+    raw_item['bill_id'] = bill_id
     raw_item['work_amount'] = amount
     return raw_item
 

@@ -10,9 +10,8 @@ class WageRawData(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     proj_id = db.Column(db.Integer, default=0)  # 项目编号
-    crew_account = db.Column(db.String(128), default='', nullable=False)  # 员工帐号
-    crew_name = db.Column(db.String(128), default='', nullable=False)  # 员工姓名
-    bus_id = db.Column(db.String(128), default='', nullable=False)  # 业务id
+    crew_id = db.Column(db.Integer, default=0)  # 员工编号
+    bill_id = db.Column(db.String(128), default='', nullable=False)  # 业务id
     position = db.Column(db.String(128), default='', nullable=False)  # 岗位
     work_hours = db.Column(db.DECIMAL(precision=10, scale=2), nullable=False, default=0.00)  # 工作时长
     work_amount = db.Column(db.DECIMAL(precision=10, scale=2), nullable=False, default=0.00)  # 工作量

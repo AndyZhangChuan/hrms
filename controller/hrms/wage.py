@@ -27,8 +27,8 @@ def create_wage_record():
     try:
         proj_id = int(request.form.get("proj_id", 0))
         lines = request.form.get("lines", None)
-        wage_service.create_wage_raw_data(proj_id, json.loads(lines))
-        return jsonify(status='ok')
+        result = wage_service.create_wage_raw_data(proj_id, json.loads(lines))
+        return jsonify(**result)
     except Exception, ex:
         traceback.print_exc()
         return jsonify(status='error', msg=ex.message)
@@ -44,8 +44,8 @@ def get_wage_record():
         filters = json.loads(request.args.get('filters', '[]'))
         proj_id = request.args.get('proj_id')
         page = int(request.args.get('page'))
-        data = wage_service.get_wage_records(proj_id, page, filters)
-        return jsonify(status='ok', content=data)
+        result = wage_service.get_wage_records(proj_id, page, filters)
+        return jsonify(**result)
     except Exception, ex:
         traceback.print_exc()
         return jsonify(status='error', msg=ex.message)

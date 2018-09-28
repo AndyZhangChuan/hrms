@@ -11,7 +11,7 @@ class FineManager(DBManager):
         self.params = self.get_editable_fields()
 
     def create_override_if_exist(self, record):
-        history_record = self.query_first({'fine_bill_id': record['fine_bill_id'], 'proj_id': record['proj_id'], 'is_del': 0})
+        history_record = self.query_first({'bill_id': record['bill_id'], 'proj_id': record['proj_id'], 'is_del': 0})
         if history_record:
             self.update(history_record, **record)
         else:
