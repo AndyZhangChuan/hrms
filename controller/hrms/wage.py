@@ -50,5 +50,3 @@ def get_wage_record():
         traceback.print_exc()
         return jsonify(status='error', msg=ex.message)
 
-
-
