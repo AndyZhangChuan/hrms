@@ -21,3 +21,4 @@ class Proj(db.Model):
     category = db.Column(db.SmallInteger, default=0)  # 项目种类(京东/天猫/顺丰等)
     is_del = db.Column(db.SmallInteger, default=0)  # 是否删除：0-未删除；1-删除
     create_time = db.Column(db.Integer, default=0)  # 创建时间
+    update_time = db.Column(db.TIMESTAMP, default='')  # 创建时间

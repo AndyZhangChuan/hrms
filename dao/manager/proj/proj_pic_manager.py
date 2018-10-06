@@ -1,5 +1,6 @@
 # -*- encoding: utf8 -*-
 from commons.helper.db_manager import DBManager
+from dao.manager.proj import ProjManager
 from dao.models.proj import ProjPic
 
 
@@ -23,3 +24,15 @@ class ProjPicManager(DBManager):
     def get_img_by_type(self, proj_id, img_type):
         filter_conditions = {'proj_id': proj_id, 'img_type': img_type, 'is_del': 0}
         return self.query(filter_conditions=filter_conditions, order_list=[self.model.sequence])
+
+    def update(self, model, **kwargs):
+        ProjManager.proj_updated(model.proj_id)
+        return super(ProjPicManager, self).update(model, **kwargs)
+
+    def create(self, **kwargs):
+        ProjManager.proj_updated(kwargs['proj_id'])
+        return super(ProjPicManager, self).create(**kwargs)
+
+    def delete(self, model, **kwargs):
+        ProjManager.proj_updated(model.proj_id)
+        return super(ProjPicManager, self).delete(model)

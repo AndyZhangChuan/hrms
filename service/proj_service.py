@@ -5,7 +5,7 @@ from core.framework.plugin import execute_proj_plugin
 from dao.manager.proj import ProjMgr, ProjPluginMgr, ProjPicMgr, ProjOpLogMgr, ProjRichTextMgr
 from service.constant import proj_constant
 from service.constant import proj_nodes
-from commons.utils import page_util
+from commons.utils import page_util, time_util
 from commons.utils import to_dict
 import time
 
@@ -136,6 +136,7 @@ def __proj_mapper(proj, biz_context):
     for item in intro_pic_list:
         proj_dict['intro_pic_list'].append({'url': item.url, 'id': item.id})
     proj_dict['highlight_tag'] = get_proj_highlight_title(proj.id)
+    proj_dict['update_time'] = proj_dict['update_time'].strftime("%Y-%m-%d")
     return proj_dict
 
 
@@ -185,7 +186,7 @@ def set_proj_tags(proj_id, tags):
 def create_or_update_proj_rich_text(proj_id, title, text_type, content, sequence=0, subtitle='', rich_text_id=0):
     if rich_text_id:
         rich_text = ProjRichTextMgr.get(rich_text_id)
-        ProjRichTextMgr.update(rich_text, sequence=sequence, rich_text=content, subtitle=subtitle)
+        ProjRichTextMgr.update(rich_text, title=title, sequence=sequence, rich_text=content, subtitle=subtitle)
     else:
         sequence = ProjRichTextMgr.get_last_sequence_by_type(proj_id, text_type) + 1
         rich_text = ProjRichTextMgr.create(proj_id=proj_id, title=title, text_type=text_type, sequence=sequence, rich_text=content, subtitle=subtitle)
