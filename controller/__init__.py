@@ -4,6 +4,7 @@ from core import app
 
 import hrms
 import cms
+import capp
 
 
 @app.route('/health')

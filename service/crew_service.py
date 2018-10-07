@@ -3,8 +3,9 @@ import json
 
 from sqlalchemy import or_
 
+from commons.utils import to_dict
 from core.framework.plugin import execute_proj_plugin
-from dao.manager import CrewMgr
+from dao.manager import CrewMgr, CrewProjMapMgr
 from service.constant import proj_nodes
 
 

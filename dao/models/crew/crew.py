@@ -16,7 +16,6 @@ class Crew(db.Model):
     supplier_name = db.Column(db.String(128), default='', nullable=False)  # 供应商
     source = db.Column(db.SmallInteger, default=0) #是否删除：0-网招；1-供应商导入 2-员工推荐 3-其他
 
-    entry_status = db.Column(db.SmallInteger, default=0) #审核状态：0-报名，1-审核通过/已入职，2-审核驳回
     work_status = db.Column(db.SmallInteger, default=0) #工作状态 0-空闲 1-已入职 -1-黑名单
     meta = db.Column(db.String(512, collation='utf8_unicode_ci'), default='')  # 收入备注
     is_del = db.Column(db.SmallInteger, default=0) #是否删除：0-未删除；1-删除

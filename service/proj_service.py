@@ -154,7 +154,7 @@ def __proj_plugins_mapper(proj, biz_context):
     item['address'] = proj.address
     item['proj_name'] = proj.proj_name
     item['crew_num'] = proj.crew_num
-    item['description'] = proj.description
+    item['wage_range'] = proj.wage_range
     item['plugins'] = __get_plugins_by_proj_id(proj.id)
     return item
 

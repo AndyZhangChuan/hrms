@@ -2,7 +2,7 @@
 from sqlalchemy import or_
 
 from commons.helper.db_manager import DBManager
-from dao.models.crew import Crew
+from dao.models.crew.crew import Crew
 
 
 class CrewManager(DBManager):

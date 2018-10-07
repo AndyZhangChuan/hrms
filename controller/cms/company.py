@@ -1,4 +1,5 @@
 # -*- encoding: utf8 -*-
+import traceback
 
 from core import app
 from flask import jsonify
@@ -21,6 +22,7 @@ def get_proj_plugins_by_company():
         data = proj_service.get_proj_plugins_by_company(int(request.args.get("page")), int(request.args.get("company_id")))
         return jsonify(data)
     except Exception, ex:
+        traceback.print_exc()
         return jsonify(status='error', msg=ex.message)
 
 
