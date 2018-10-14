@@ -71,16 +71,6 @@ def manager_login():
         return jsonify(status='error', msg=ex.message)
 
 
-@app.route("/manager/forget/psw", methods=['GET'])
-def forget_manager_password():
-    pass
-
-
-@app.route("/manager/password", methods=['PUT'])
-def update_manager_password():
-    pass
-
-
 @app.route("/manager/role/allocate", methods=['POST'])
 @rights(RightsResourceConstant.RIGHTS_MANAGER_ROLE_ALLOCATE)
 def allocate_manager_role():
@@ -109,8 +99,16 @@ def allocate_manager_proj():
         return jsonify(status='error', msg=ex.message)
 
 
-
-
-
-
-
+@app.route("/manager/login/code/send", methods=['POST'])
+def login_code_send():
+    """
+    发送微信登陆验证码
+    :return:
+    """
+    try:
+        phone = int(request.form.get("phone"))
+        data = rights_user_service.send_login_auth_code(phone)
+        return jsonify(data)
+    except Exception, ex:
+        print ex
+        return jsonify(status="fail", msg="短信验证码发送失败!")

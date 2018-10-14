@@ -51,8 +51,8 @@ class ManagerUpdateForm(BaseForm):
 
 
 class ManagerLoginForm(BaseForm):
-    email = StringField('email', validators=[DataRequired()])
-    password = StringField('password', validators=[DataRequired()])
+    email = StringField('phone', validators=[DataRequired()])
+    password = StringField('code', validators=[DataRequired()])
 
 
 class ManagerRoleAllocateForm(BaseForm):
