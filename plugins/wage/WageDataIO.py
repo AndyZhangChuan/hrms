@@ -5,7 +5,7 @@ import json
 from commons.exception import BatchUploadError
 from commons.helper import string_configure_helper
 from commons.utils import time_util, to_dict
-from dao.manager import WageMgr, CrewMgr
+from data.manager import WageMgr, CrewMgr
 from plugins.plugin import Plugin, Output, Props
 from service.constant import proj_nodes as constants
 
@@ -48,7 +48,7 @@ class WageDataIO(Plugin):
                 record['wage_time'] = time_util.dateString2timestampCommon(record['wage_time'])
             crew_id = CrewMgr.get_crew_id_by_account(record['crew_account'])
             if not crew_id:
-                data['errors'].append(BatchUploadError(line_index, line, '该员工没有录入系统').to_dict())
+                data['errors'].append(BatchUploadError(line_index, '该员工没有录入系统').to_dict())
                 continue
             else:
                 record['crew_id'] = crew_id

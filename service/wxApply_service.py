@@ -5,7 +5,7 @@ from sqlalchemy import or_
 
 from commons.utils import to_dict
 from core.framework.plugin import execute_proj_plugin
-from dao.manager import CrewProjMapMgr, CrewMgr
+from data.manager import CrewProjMapMgr, CrewMgr
 from service.constant import proj_nodes
 
 

@@ -1,6 +1,6 @@
 # -*- encoding: utf8 -*-
 
-from dao.manager import CompanyMgr
+from data.manager import CompanyMgr
 from commons.utils import page_util
 
 

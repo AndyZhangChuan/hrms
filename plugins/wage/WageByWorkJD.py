@@ -27,6 +27,13 @@ class WageByWorkJD(Plugin):
     fyth_price = Props(type='float', default=1, nullable=True, comment='非一体化打包单价')
     fyth_standard = Props(type='int', default=1, nullable=True, comment='非一体化打包标准')
 
+
+    @staticmethod
+    def getter(props, form, data):
+        return {
+
+        }
+
     @staticmethod
     def wage_data_add(props, form, data):
         records = data['records']

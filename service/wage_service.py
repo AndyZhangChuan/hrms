@@ -2,7 +2,7 @@
 import json
 
 from core.framework.plugin import execute_proj_plugin
-from dao.manager import WageMgr, WageRawDataMgr
+from data.manager import WageMgr, WageRawDataMgr
 from service.constant import proj_nodes
 
 
@@ -30,7 +30,7 @@ def create_wage_raw_data(proj_id, lines):
 def get_wage_records(proj_id, page, filters):
     filter_condition = {'is_del': 0}
     expressions = []
-    if 0 < filters['startTime'] < filters['endTime']:
+    if 'startTime' in filters and 0 < filters['startTime'] < filters['endTime']:
         expressions = [WageMgr.model.wage_time > filters['startTime'], WageMgr.model.wage_time < filters['endTime']]
     if 'crew_id' in filters and filters['crew_id']:
         expressions.append(WageMgr.model.crew_id == filters['crew_id'])

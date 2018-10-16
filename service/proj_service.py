@@ -2,7 +2,7 @@
 from flask import request
 
 from core.framework.plugin import execute_proj_plugin
-from dao.manager.proj import ProjMgr, ProjPluginMgr, ProjPicMgr, ProjOpLogMgr, ProjRichTextMgr
+from data.manager.proj import ProjMgr, ProjPluginMgr, ProjOpLogMgr, ProjRichTextMgr, ProjPicMgr
 from service.constant import proj_constant
 from service.constant import proj_nodes
 from commons.utils import page_util, time_util

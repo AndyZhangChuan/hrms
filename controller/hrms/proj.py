@@ -8,6 +8,7 @@ from core import app
 from flask import jsonify
 from flask import request
 from controller.forms.proj import ProjUpdateForm, ProjStatusChangeForm
+from data import dao
 from service import proj_service
 from commons.utils import web_util, time_util
 
@@ -65,8 +66,9 @@ def get_proj_list():
 @app.route("/proj/base", methods=['GET'])
 def get_proj_base():
     try:
-        proj_id = int(request.args.get("proj_id"))
-        base = proj_service.get_proj_base_info(proj_id)
+        getter = 'get_proj_by_id'
+        attrs = ['logo_url', 'intro_list_pics', 'update_time_str']
+        base = dao.get('proj', getter, attrs, {'proj_id': 1})
         return jsonify(status='ok', content=base)
     except Exception, ex:
         traceback.print_exc()

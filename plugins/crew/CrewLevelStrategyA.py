@@ -3,7 +3,7 @@ import collections
 import json
 import time
 
-from dao.manager import CrewLevelMgr
+from data.manager import CrewLevelMgr
 from plugins.plugin import Plugin, Props, Output
 from service.constant import proj_nodes as constants
 

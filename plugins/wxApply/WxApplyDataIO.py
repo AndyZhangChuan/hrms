@@ -2,7 +2,7 @@
 import collections
 from commons.helper import string_configure_helper
 from commons.utils import time_util, to_dict, GetInformation
-from dao.manager import CrewProjMapMgr, CrewMgr
+from data.manager import CrewProjMapMgr, CrewMgr
 from plugins.plugin import Plugin, Output, Props
 from service.constant import proj_nodes as constants
 
@@ -31,6 +31,7 @@ class WxApplyDataIO(Plugin):
                 continue
             crew = to_dict(crew)
             crew['create_time'] = time_util.timestamp2dateString(crew['create_time'])
+            crew['start_time'] = time_util.timestamp2dateString(record.start_time) if record.start_time else '待定'
             crew['entry_status'] = CrewProjMapMgr.translate_entry_status(record.entry_status)
             crew['age'] = GetInformation(crew['id_card_num']).get_age()
             crew['gender'] = GetInformation(crew['id_card_num']).get_gender_text()

@@ -2,10 +2,9 @@
 import collections
 import json
 
-from commons.exception import BatchUploadError
 from commons.helper import string_configure_helper
 from commons.utils import time_util, to_dict
-from dao.manager import CrewMgr
+from data.manager import CrewMgr
 from plugins.plugin import Plugin, Output, Props
 from service.constant import proj_nodes as constants
 

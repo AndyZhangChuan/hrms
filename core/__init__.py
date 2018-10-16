@@ -12,6 +12,7 @@ from configs import config
 from core.db.router import AutoRouteSQLAlchemy
 from core.dapper.intercept import XB3HTTPAdapter
 from core.log import getLogger
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 log = getLogger("hrms")
@@ -92,3 +93,4 @@ for member in members:
 
 
 log.info("project init done")
+
