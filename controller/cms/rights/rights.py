@@ -51,7 +51,7 @@ def delete_rights_resource(resource_id):
 @rights(RightsResourceConstant.RIGHTS_RESOURCE_LIST)
 def get_rights_resource_list():
     try:
-        data = rights_resource_service.get_manager_rights_list(int(request.args.get("page", 1)))
+        data = rights_resource_service.get_rights_resource_list(int(request.args.get("page", 1)))
         return jsonify(data)
     except Exception, ex:
         return jsonify(status='error', msg=ex.message)
@@ -79,9 +79,9 @@ def get_rights_editable_list():
 
 @app.route("/rights/uiElements/byParentId", methods=['GET'])
 @rights(RightsResourceConstant.RIGHTS_MANAGER_LOGIN)
-def get_rights_resource_detail():
+def get_rights_resource_list_by_parent_id():
     try:
-        data = rights_resource_service.get_rights_resource_list_by_parent_id(int(request.form.get("parent_id", 1)))
+        data = rights_resource_service.get_rights_resource_list_by_parent_id(int(request.args.get("parent_id", 1)))
         return jsonify(data)
     except Exception, ex:
         return jsonify(status='error', msg=ex.message)

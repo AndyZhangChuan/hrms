@@ -60,7 +60,7 @@ def get_rights_role_list():
 
 @app.route("/rights/role/<int:role_id>", methods=['GET'])
 @rights(RightsResourceConstant.RIGHTS_ROLE_DETAIL)
-def get_rights_role_list(role_id):
+def get_rights_role_detail(role_id):
     try:
         data = rights_role_service.get_rights_role_detail(role_id)
         return jsonify(data)

@@ -10,7 +10,6 @@ class UserRightsResource(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     resource_name = db.Column(db.String(64), default='', nullable=False)  # 资源/权限名称
-    short_name = db.Column(db.String(128), default='', nullable=False)  # 英文简称（必填），程序控制唯
     value = db.Column(db.String(256), default='', nullable=False)  # 资源值/url
     resource_type = db.Column(db.SmallInteger, default=1)  # 资源类型： 1-资源，2-资源组
     parent_id = db.Column(db.Integer, default=0, nullable=False) # 0-为顶级资源

@@ -25,7 +25,7 @@ def add_rights_resource(form):
       'parent_id': form.parent_id.data,
       'rank': form.rank.data
     }
-    if params['parent_id'] != 0 and not UserRoleRightsResourceMapMgr.get(params['parent_id']):
+    if params['parent_id'] != 0 and not UserRightsResourceMgr.get(params['parent_id']):
         return dict(status='error', msg='无效的父权限编号')
     if UserRightsResourceMgr.check_resource_exist(params['value']):
         return dict(status='error', msg='资源已经创建')
@@ -77,7 +77,7 @@ def get_rights_resource_list(page):
 
 
 def get_rights_resource_list_by_parent_id(parent_id):
-    expressions = [UserRightsResourceMgr.model.is_del == 0, UserRightsResourceMgr.model.parent_i == parent_id]
+    expressions = [UserRightsResourceMgr.model.is_del == 0, UserRightsResourceMgr.model.parent_id == parent_id]
     return page_util.get_page_result(UserRightsResourceMgr.model, page=1, expressions=expressions, page_size=0)
 
 
@@ -89,7 +89,7 @@ def get_rights_resource_detail(resource_id):
 
 
 def get_rights_tree():
-    resources = UserRightsResourceMgr.query()
+    resources = UserRightsResourceMgr.query(filter_conditions={'is_del': 0})
     group = [resource.id for resource in resources if resource.parent_id == 0]
     group_child_map = dict()
     for group_id in group:

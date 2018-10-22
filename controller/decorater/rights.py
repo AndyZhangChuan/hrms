@@ -6,7 +6,7 @@ from functools import wraps
 from core import app
 from commons.utils import web_util
 from dao.manager.rights import UserTokenMgr
-from service import rights_service
+from service.rights import rights_resource_service
 
 
 def rights(resource_value):
@@ -26,7 +26,7 @@ def rights(resource_value):
                 return jsonify(status='error', msg='rights check error')
 
             # 这里后面使用redis缓存
-            resources = rights_service.get_manager_rights_list(manager_id)
+            resources = rights_resource_service.get_manager_rights_list(manager_id)
             for resource in resources:
                 if resource.value == resource_value:
                     return f(*args, **kwargs)

@@ -7,7 +7,7 @@ class RightsResourceAddForm(BaseForm):
     resource_name = StringField('resource_name', validators=[DataRequired()])
     value = StringField('value', validators=[DataRequired()])
     resource_type = IntegerField('resource_type', validators=[DataRequired()])
-    parent_id = IntegerField('parent_id', validators=[DataRequired()])
+    parent_id = IntegerField('parent_id', validators=[Optional()], default=0)
     rank = IntegerField('rank', validators=[Optional()], default=0)
 
 
