@@ -13,7 +13,7 @@ def rights(resource_value):
     def rights_check(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-
+            return f(*args, **kwargs)
             # 不进行权限控制的请求
             request_url = request.path
             exclude_url = app.config.get('RIGHTS_EXCLUDE_RESOURCE_LIST', None)
