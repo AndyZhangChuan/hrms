@@ -3,10 +3,8 @@ import json
 
 from sqlalchemy import or_
 
-from commons.utils import to_dict
-from core.framework.plugin import execute_proj_plugin
+from commons.utils import to_dict, time_util, GetInformation
 from data.manager import CrewProjMapMgr, CrewMgr
-from service.constant import proj_nodes
 
 
 def get_apply_records(proj_id, page, filters):
@@ -34,10 +32,20 @@ def get_apply_records(proj_id, page, filters):
         else:
             records = CrewProjMapMgr.query(expressions=expressions, filter_conditions=filter_condition)
     data = {'proj_id': proj_id, 'count': count, 'records': records}
-    execute_result = execute_proj_plugin(proj_id, proj_nodes.WX_APPLY_DATA_OUTPUT, {}, data)
-    data['records'] = None
+    for record in data['records']:
+        crew = CrewMgr.get(record.crew_id)
+        if not crew:
+            continue
+        crew = to_dict(crew)
+        crew['create_time'] = time_util.timestamp2dateString(crew['create_time'])
+        crew['start_time'] = time_util.timestamp2dateString(record.start_time) if record.start_time else '待定'
+        crew['entry_status'] = CrewProjMapMgr.translate_entry_status(record.entry_status)
+        crew['age'] = GetInformation(crew['id_card_num']).get_age()
+        crew['gender'] = GetInformation(crew['id_card_num']).get_gender_text()
+        crew['apply_id'] = record.id
+        data['result'].append(crew)
     data['result'] = json.dumps(data['result'])
-    return execute_result
+    return data['result']
 
 
 def apply_proj(proj_id, crew_id):

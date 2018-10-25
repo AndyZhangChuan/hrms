@@ -3,18 +3,7 @@ import json
 
 from commons.exception import BatchUploadError
 from commons.utils import time_util
-from core.framework.plugin import execute_proj_plugin
 from data.manager import FineMgr, CrewMgr
-from service.constant import proj_nodes
-
-
-def get_input_format(proj_id):
-    data = {}
-    execute_result = execute_proj_plugin(proj_id, proj_nodes.FINE_DATA_INPUT, {}, data)
-    if execute_result['status'] != 'ok':
-        return execute_result['data']
-    else:
-        return data
 
 
 def create_fine_record(proj_id, lines):
@@ -45,7 +34,7 @@ def create_fine_record(proj_id, lines):
     return {'errors': errors, 'lines': lines}
 
 
-
-def delete_fine_records(proj_id, fine_id):
-    data = {'fine_id': fine_id, 'proj_id': proj_id}
-    return execute_proj_plugin(proj_id, proj_nodes.FINE_DATA_UPDATE, {}, data)
+def delete_fine_records(fine_id):
+    record = FineMgr.get(fine_id)
+    if record:
+        FineMgr.delete(record)

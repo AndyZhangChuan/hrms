@@ -5,10 +5,10 @@ from inspect import getmembers
 from core import plugin_pool
 from commons.exception import ValidationError
 from plugins.plugin import Props
-from data.models.proj.proj_plugin import ProjPlugin
+from data.models.framework.plugin import Plugin
 
 
-def execute_proj_plugin(proj_id, method, form, data):
+def execute_plugin(org_id, proj_id, method, form, data):
     """
     执行给定商品包含的所有plugin逻辑
     :param proj_id: 项目编号
@@ -17,16 +17,16 @@ def execute_proj_plugin(proj_id, method, form, data):
     :param data: 输入数据
     :return: 所有plugin逻辑执行完之后返回的数据
     """
-    configs = ProjPlugin.query.filter_by(proj_id=proj_id, is_del=0).all()
+    configs = Plugin.query.filter_by(org_id=org_id, proj_id=proj_id, is_del=0).all()
     plugin_configs = [{'name': item.plugin_id, 'props': item.props} for item in configs]
     try:
-        data = execute_plugin(plugin_configs, method, form, data)
+        data = execute_handle(plugin_configs, method, form, data)
     except ValidationError, e:
         return dict(status='error', msg=e.getMessage()['message'], trace=data['trace'])
     return dict(status='ok', data=data)
 
 
-def execute_plugin(plugins, method, form, data):
+def execute_handle(plugins, method, form, data):
     """
     执行plugin逻辑
     :param plugins: list，记录plugin name和props

@@ -6,6 +6,7 @@ from flask import jsonify
 from core import app
 from inspect import getmembers, isclass
 import plugins
+import plugins.wage as wage_plugins
 
 
 @app.route("/plugins", methods=['POST', 'GET'])
@@ -17,6 +18,19 @@ def get_plugins():
             if isclass(member[1]):
                 plugin_pool[member[0]] = get_plugin_info(member[1])
         return jsonify(status='ok', content=plugin_pool)
+    except ValidationError, e:
+        return jsonify(status='fail', content=e.getMessage())
+
+
+@app.route("/plugins/offer", methods=['POST', 'GET'])
+def get_offer_plugins():
+    try:
+        plugin_pool = {}
+        members = getmembers(wage_plugins)
+        for member in members:
+            if isclass(member[1]):
+                plugin_pool[member[0]] = get_plugin_info(member[1])
+        return jsonify(status='ok', data=plugin_pool)
     except ValidationError, e:
         return jsonify(status='fail', content=e.getMessage())
 

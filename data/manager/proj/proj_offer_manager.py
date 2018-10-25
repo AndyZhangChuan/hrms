@@ -1,13 +1,11 @@
 # -*- encoding: utf8 -*-
 from commons.helper.db_manager import DBManager
-from data.models.proj import ProjPlugin
+from data.models.proj.proj_offer import ProjOffer
 
 
-class ProjPluginManager(DBManager):
+class ProjOfferManager(DBManager):
 
     def __init__(self):
         super(DBManager, self).__init__()
-        self.model = ProjPlugin
+        self.model = ProjOffer
         self.params = self.get_editable_fields()
-        self.parent = 'proj'
-

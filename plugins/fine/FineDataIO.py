@@ -26,10 +26,4 @@ class FineDataIO(Plugin):
 
     @staticmethod
     def fine_data_update(props, form, data):
-        fine_id = data['fine_id']
-        record = FineMgr.query_first(
-            filter_conditions={'id': fine_id, 'is_del': 0}
-        )
-        if record:
-            FineMgr.delete(record)
         return Output(Output.OK, content=data)

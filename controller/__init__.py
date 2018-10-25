@@ -3,6 +3,7 @@ import traceback
 
 from flask import render_template, request, jsonify
 
+from controller.decorater import get_request_proj_id, get_request_org_id
 from core import app
 
 import hrms
@@ -25,8 +26,14 @@ def page_h5():
 @app.route("/data/query", methods=['GET'])
 def data_query():
     try:
+        proj_id = get_request_proj_id()
+        org_id = get_request_org_id()
         options = json.loads(request.args.get('options'))
         filters = json.loads(request.args.get('filters'))
+        if 'proj_id' not in filters:
+            filters['proj_id'] = proj_id
+        if 'org_id' not in filters:
+            filters['org_id'] = org_id
         query = options['query']
         result = ''
         if query.startswith('get'):

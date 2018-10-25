@@ -9,4 +9,3 @@ class ProjOpLogManager(DBManager):
         super(DBManager, self).__init__()
         self.model = ProjOpLog
         self.params = self.get_editable_fields()
-        self.parent = 'proj'

@@ -1,15 +1,12 @@
 # -*- encoding: utf8 -*-
-import datetime
-
 from commons.helper.db_manager import DBManager
-from data.models.proj.proj import Proj
+from data.models.framework.plugin import Plugin
 
 
-class ProjManager(DBManager):
+class PluginManager(DBManager):
 
     def __init__(self):
         super(DBManager, self).__init__()
-        self.model = Proj
+        self.model = Plugin
         self.params = self.get_editable_fields()
-        self.gen_params = ['logo_url', 'intro_list_pics']
 

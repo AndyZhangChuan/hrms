@@ -1,15 +1,11 @@
 # -*- encoding: utf8 -*-
-import datetime
-
 from commons.helper.db_manager import DBManager
-from data.models.proj.proj import Proj
+from data.models.proj.proj_recruit_post import ProjRecruitPost
 
 
-class ProjManager(DBManager):
+class ProjRecruitPostManager(DBManager):
 
     def __init__(self):
         super(DBManager, self).__init__()
-        self.model = Proj
+        self.model = ProjRecruitPost
         self.params = self.get_editable_fields()
-        self.gen_params = ['logo_url', 'intro_list_pics']
-

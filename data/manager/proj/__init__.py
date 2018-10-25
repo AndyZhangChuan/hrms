@@ -1,11 +1,9 @@
 from proj_manager import ProjManager
-from proj_pic_manager import ProjPicManager
 from proj_op_log_manager import ProjOpLogManager
-from proj_plugin_manager import ProjPluginManager
-from proj_rich_text_manager import ProjRichTextManager
+from proj_offer_manager import ProjOfferManager
+from proj_recruit_post_manager import ProjRecruitPostManager
 
-ProjPicMgr = ProjPicManager()
 ProjOpLogMgr = ProjOpLogManager()
-ProjPluginMgr = ProjPluginManager()
-ProjRichTextMgr = ProjRichTextManager()
 ProjMgr = ProjManager()
+ProjOfferMgr = ProjOfferManager()
+ProjRecruitPostMgr = ProjRecruitPostManager()

@@ -9,6 +9,7 @@ class FeConfigure(db.Model):
     __table_args__ = {"mysql_engine":"InnoDB", "mysql_charset":"utf8"}
 
     id                  = db.Column(db.BigInteger, primary_key=True, nullable=False)
+    org_id              = db.Column(db.Integer, default=1)                                    # 公司id
     proj_id             = db.Column(db.Integer, default=0)                                    # 项目id
     page_url              = db.Column(db.String(100, collation='utf8_unicode_ci'), default='')  # 项目所属模块
     gear_id           = db.Column(db.String(100, collation='utf8_unicode_ci'), default='')  # 插件名ID

@@ -2,10 +2,14 @@
 from data.manager import DaoRelationMapMgr
 from proj_dao import ProjDao
 from fine_dao import FineDao
+from crew_dao import CrewDao
+from wage_dao import WageDao
 
 dao_map = {
     'proj': ProjDao(),
     'fine': FineDao(),
+    'crew': CrewDao(),
+    'wage': WageDao(),
 }
 
 attrs = DaoRelationMapMgr.query({'is_del': 0})
