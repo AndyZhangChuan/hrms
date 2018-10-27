@@ -20,6 +20,7 @@ def create_crew_record():
         result = crew_service.create_crew_record(proj_id, json.loads(lines))
         return jsonify(status='ok', data=result)
     except Exception, ex:
+        traceback.print_exc()
         return jsonify(status='error', msg=ex.message)
 
 

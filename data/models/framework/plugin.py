@@ -9,8 +9,8 @@ class Plugin(db.Model):
     __table_args__ = {"mysql_engine":"InnoDB", "mysql_charset":"utf8"}
 
     id                  = db.Column(db.BigInteger, primary_key=True, nullable=False)
-    module_type         = db.Column(db.String(100, collation='utf8_unicode_ci'), default='')  # 项目所属模块
-    module_id           = db.Column(db.Integer, default=0)                                    # 项目id
+    bus_type            = db.Column(db.String(128), default='', nullable=False)  # 项目编号
+    bus_id              = db.Column(db.Integer, default=0)  # 项目编号
     category            = db.Column(db.String(100, collation='utf8_unicode_ci'), default='')  # 项目所属模块
     plugin_id           = db.Column(db.String(100, collation='utf8_unicode_ci'), default='')  # 插件名ID
     plugin_name         = db.Column(db.String(100, collation='utf8_unicode_ci'), default='')  # 插件名

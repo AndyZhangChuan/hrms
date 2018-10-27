@@ -1,39 +1,39 @@
 # coding=utf-8
 from commons.utils import to_dict, time_util
-from data.manager import PicMgr, RichTextMgr, PluginMgr
-from data.manager.proj import ProjMgr, ProjOfferMgr
+from data.manager import PicMgr, RichTextMgr, PluginMgr, CrewMgr
+from data.manager.proj import ProjMgr, ProjOfferMgr, ProjRecruitPostMgr
 
 
 class ProjDao:
     @staticmethod
-    def add_logo_url(org_id, data):
+    def add_logo_url(post_id, data):
         """
         获取项目logo图片链接
         """
-        logo_pic = PicMgr.get_img_by_type(org_id, data['id'], 'logo')
+        logo_pic = PicMgr.get_img_by_type('post', post_id, 'logo')
         data['logo_url'] = logo_pic[0].url if len(logo_pic) else ''
 
     @staticmethod
-    def add_intro_list_pics(org_id, proj_id, data):
+    def add_intro_list_pics(post_id, data):
         """
         获取项目介绍图片链接列表，格式为{url: 'xx', id: '1'}
         """
-        intro_pic_list = PicMgr.get_img_by_type(org_id, proj_id, 'intro')
+        intro_pic_list = PicMgr.get_img_by_type('post', post_id, 'intro')
         result = []
         for item in intro_pic_list:
             result.append({'url': item.url, 'id': item.id})
         data['intro_list_pics'] = result
 
     @staticmethod
-    def add_recruit_post_details(org_id, proj_id, post_id, data):
+    def add_recruit_post_details(post_id, data):
         """
         获取项目招工贴中的招工详情介绍，为富文本+图片集的形式
         """
-        rich_text_list = RichTextMgr.get_richtext_by_type(org_id, proj_id, 'proj_recruit_detail' + '_post'+post_id)
+        rich_text_list = RichTextMgr.get_richtext_by_type('post', post_id, 'proj_recruit_detail')
         result = []
         for item in rich_text_list:
             rich_text = to_dict(item)
-            intro_pic_list = PicMgr.get_img_by_type(org_id, proj_id, item.title + '_post'+post_id)
+            intro_pic_list = PicMgr.get_img_by_type('post', post_id, item.title)
             rich_text['pic_list'] = []
             for pic in intro_pic_list:
                 rich_text['pic_list'].append({'url': pic.url, 'id': pic.id})
@@ -41,17 +41,16 @@ class ProjDao:
         data['recruit_post_details'] = result
 
     @staticmethod
-    def add_recruit_post_highlight(org_id, proj_id, post_id, data):
+    def add_recruit_post_highlight(post_id, data):
         """
         获取项目招工贴中的高亮信息，为富文本+图片集的形式， 范围一个dict
         """
-        rich_text = RichTextMgr.query_first({'org_id': org_id, 'proj_id': proj_id, 'text_type': 'proj_highlight' + '_post'+post_id},
+        rich_text = RichTextMgr.query_first({'bus_type': 'post', 'bus_id': post_id, 'text_type': 'proj_highlight'},
                                             order_list=[RichTextMgr.model.sequence.desc()])
         if not rich_text:
             return None
         rich_text = to_dict(rich_text)
-        intro_pic_list = PicMgr.query({'org_id': org_id, 'proj_id': proj_id, 'img_type': 'proj_highlight' + '_post'+post_id},
-                                      order_list=[PicMgr.model.sequence.desc()])
+        intro_pic_list = PicMgr.get_img_by_type('post', post_id, 'proj_highlight')
         rich_text['pic_list'] = []
         for pic in intro_pic_list:
             rich_text['pic_list'].append({'url': pic.url, 'sequence': pic.sequence})
@@ -95,8 +94,26 @@ class ProjDao:
         获取工资规则插件
         """
         if 'id' in data:
-            plugins = PluginMgr.query({'module_type': 'offer', 'module_id': data['id'], 'is_del': 0})
+            plugins = PluginMgr.query({'bus_type': 'offer', 'bus_id': data['id'], 'is_del': 0})
             data['plugins'] = to_dict(plugins)
+
+    @staticmethod
+    def add_position_options(data):
+        """
+        获取工资规则插件
+        """
+        if 'id' in data:
+            options = ProjOfferMgr.get_position_options(data['id'])
+            data['position_options'] = options
+
+    @staticmethod
+    def add_crew_num(data):
+        """
+        获取项目员工数量
+        """
+        if 'id' in data:
+            crew_num = CrewMgr.count({'proj_id': data['id'], 'is_del': 0})
+            data['crew_num'] = crew_num
 
     @staticmethod
     def list_proj(org_id, page, page_size=10):
@@ -124,3 +141,14 @@ class ProjDao:
         records = ProjOfferMgr.query(filter_conditions=filter_condition, limit=page_size,
                                      offset=(page - 1) * page_size, order_list=[ProjOfferMgr.model.start_time.desc()])
         return {'total_count': count, 'datas': to_dict(records)}
+
+
+    @staticmethod
+    def get_proj_post(proj_id):
+        """通过项目id获取项目招聘宣传贴"""
+        post = ProjRecruitPostMgr.query_first({'proj_id': proj_id})
+        if not post:
+            post = ProjRecruitPostMgr.create(proj_id=proj_id)
+        post = to_dict(post)
+        post['post_id'] = post['id']
+        return post

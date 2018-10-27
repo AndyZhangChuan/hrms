@@ -1,7 +1,7 @@
 # coding=utf-8
 import json
 
-from data.manager import CrewMgr, CrewProjMapMgr, CrewLevelMgr
+from data.manager import CrewMgr, CrewLevelMgr
 
 
 def create_crew_record(proj_id, lines):
@@ -20,7 +20,8 @@ def create_crew_record(proj_id, lines):
         crew = CrewMgr.create_override_if_exist(record)
         level = CrewLevelMgr.query_first({'crew_id': crew.id, 'is_del': 0})
         if not level:
-            CrewLevelMgr.create(crew_id=record['crew_id'], crew_name=record['crew_name'], level_name='青铜')
+            CrewLevelMgr.create(crew_id=crew.id, crew_name=record['crew_name'], level_name='青铜')
+    return {'errors': [], 'lines': lines}
 
 
 def update_crew_records(crew_id, content):

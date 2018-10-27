@@ -9,6 +9,8 @@ class Crew(db.Model):
     __table_args__ = {"mysql_engine":"InnoDB", "mysql_charset":"utf8"}
 
     id = db.Column(db.BigInteger, primary_key=True, nullable=False, autoincrement=True)
+    org_id = db.Column(db.Integer, default=0)  # 机构编号
+    proj_id = db.Column(db.Integer, default=0)  # 当前项目编号，如果为0则为闲置
     crew_account = db.Column(db.String(128), default='', nullable=False)  # 员工帐号
     crew_name = db.Column(db.String(128), default='', nullable=False)  # 员工姓名
     phone = db.Column(db.Integer, default=0)  # 员工手机号

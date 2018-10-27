@@ -13,7 +13,7 @@ class CrewManager(DBManager):
         self.params = self.get_editable_fields()
 
     def create_override_if_exist(self, record):
-        history_record = self.query_first({'is_del': 0}, expressions=[or_(self.model.id_card_num == record['id_card_num'], self.model.id == record['crew_id'])])
+        history_record = self.query_first({'is_del': 0}, expressions=[or_(self.model.id_card_num == record['id_card_num'], self.model.phone == record['phone'])])
         if history_record:
             return self.update(history_record, **record)
         else:

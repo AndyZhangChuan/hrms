@@ -12,6 +12,7 @@ class CrewProjMap(db.Model):
     crew_id = db.Column(db.BigInteger, default=0, nullable=False)  # 员工帐号
     proj_id = db.Column(db.Integer, default=0)  # 项目编号
     start_time = db.Column(db.Integer, default=0)  # 开工时间
+    end_time = db.Column(db.Integer, default=0)  # 结束时间
     entry_status = db.Column(db.SmallInteger, default=0)  #审核状态：0-报名，1-审核通过/已入职，2-审核驳回
     is_del = db.Column(db.SmallInteger, default=0) #是否删除：0-未删除；1-删除
     create_time = db.Column(db.Integer, default=0) #创建时间

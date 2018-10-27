@@ -19,4 +19,3 @@ class ProjRecruitPost(db.Model):
     post_status = db.Column(db.SmallInteger, default=0)  # 项目状态 0-招工(未开始),1-进行中,2-已结束, 3-异常
     is_del = db.Column(db.SmallInteger, default=0)  # 是否删除：0-未删除；1-删除
     create_time = db.Column(db.Integer, default=0)  # 创建时间
-    update_time = db.Column(db.TIMESTAMP, default='')  # 创建时间

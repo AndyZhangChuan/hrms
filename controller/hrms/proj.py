@@ -124,3 +124,17 @@ def update_offer(offer_id):
     except Exception, ex:
         traceback.print_exc()
         return jsonify(status='error', msg=ex.message)
+
+
+@app.route("/post/<int:post_id>", methods=['PUT'])
+def update_post(post_id):
+    """
+    更改项目
+    :return:
+    """
+    try:
+        data = proj_service.update_post(post_id, request.form)
+        return jsonify(data)
+    except Exception, ex:
+        traceback.print_exc()
+        return jsonify(status='error', msg=ex.message)

@@ -56,6 +56,8 @@ class CrewDao:
     def list_crew_by_create_time_desc(proj_id, search_key, page, page_size=10):
         """获取员工列表并分页, 根据发生时间倒序排列"""
         filter_condition = {'is_del': 0}
+        if proj_id:
+            filter_condition['proj_id'] = proj_id
         expressions = []
         if search_key:
             expressions = [or_(CrewMgr.model.crew_name == search_key, CrewMgr.model.phone == search_key,

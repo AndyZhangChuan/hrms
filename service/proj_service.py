@@ -1,7 +1,7 @@
 # -*- encoding: utf8 -*-
 from controller import get_request_org_id, get_request_proj_id
 from data.manager import PicMgr
-from data.manager.proj import ProjMgr, ProjOpLogMgr, ProjOfferMgr
+from data.manager.proj import ProjMgr, ProjOpLogMgr, ProjOfferMgr, ProjRecruitPostMgr
 from service.constant import proj_constant
 from commons.utils import to_dict, web_util
 
@@ -79,8 +79,7 @@ def create_offer(form):
     offer = ProjOfferMgr.create(proj_id=proj_id, **form)
 
     # 新增操作记录
-    __add_proj_op_log(web_util.get_operator_id(), offer.id, proj_constant.PROJ_OP_TYPE_CREATE, "新建一个报价单",
-                      0, 0)
+    __add_proj_op_log(web_util.get_operator_id(), offer.id, proj_constant.PROJ_OP_TYPE_CREATE, "新建一个报价单", 0, 0)
     return dict(status='ok', data=to_dict(offer))
 
 
@@ -90,6 +89,15 @@ def update_offer(offer_id, form):
         return dict(status='error', msg='报价单不存在')
     ProjOfferMgr.update(offer, **form)
     # 新增操作记录
-    __add_proj_op_log(web_util.get_operator_id(), offer.id, proj_constant.PROJ_OP_TYPE_UPDATE, "更改报价单信息",
-                      0, 0)
+    __add_proj_op_log(web_util.get_operator_id(), offer.id, proj_constant.PROJ_OP_TYPE_UPDATE, "更改报价单信息", 0, 0)
     return dict(status='ok', data=to_dict(offer))
+
+
+def update_post(post_id, form):
+    post = ProjRecruitPostMgr.get(post_id)
+    if post is None:
+        return dict(status='error', msg='招聘贴不存在')
+    ProjRecruitPostMgr.update(post, **form)
+    # 新增操作记录
+    __add_proj_op_log(web_util.get_operator_id(), post.id, proj_constant.PROJ_OP_TYPE_UPDATE, "更改招聘贴信息", 0, 0)
+    return dict(status='ok', data=to_dict(post))

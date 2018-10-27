@@ -9,8 +9,8 @@ class RichText(db.Model):
     __table_args__ = {"mysql_engine": "InnoDB", "mysql_charset": "utf8"}
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    org_id = db.Column(db.Integer, default=1)  # 项目编号
-    proj_id = db.Column(db.Integer, default=0)  # 项目编号
+    bus_type = db.Column(db.String(128), default='', nullable=False)  # 项目编号
+    bus_id = db.Column(db.Integer, default=0)  # 项目编号
     title = db.Column(db.String(128), default='', nullable=False)  # 标题
     subtitle = db.Column(db.String(128), default='', nullable=False)  # 副标题
     text_type = db.Column(db.String(128), default='', nullable=False)  # 文本类型

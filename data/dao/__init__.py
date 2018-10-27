@@ -28,7 +28,7 @@ def get(module, getter, attrs, filters):
     data = getattr(dao, getter)(**args)
     for item in attrs:
         input_args = attr_map[module + item].input_args
-        args = {item: filters[item] for item in (input_args.split(',') if input_args else [])}
+        args = {item: filters[item] if item in filters else data[item] for item in (input_args.split(',') if input_args else [])}
         args['data'] = data
         getattr(dao, 'add_'+item)(**args)
     return data
