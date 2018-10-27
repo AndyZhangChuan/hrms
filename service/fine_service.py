@@ -1,33 +1,40 @@
-from core.framework.plugin import execute_proj_plugin
-from service.constant import proj_nodes
+# coding=utf-8
+import json
 
-
-def get_input_format(proj_id):
-    data = {}
-    execute_result = execute_proj_plugin(proj_id, proj_nodes.FINE_DATA_INPUT, {}, data)
-    if execute_result['status'] != 'ok':
-        return execute_result['data']
-    else:
-        return data
+from commons.exception import BatchUploadError
+from commons.utils import time_util
+from data.manager import FineMgr, CrewMgr
 
 
 def create_fine_record(proj_id, lines):
-    execute_proj_plugin(proj_id, proj_nodes.FINE_DATA_ADD, {}, {'proj_id': proj_id, 'lines': lines})
+    errors = []
+    line_index = 0
+    for line in lines:
+        line_index += 1
+        record = {'proj_id': proj_id, 'meta': {}}
+        for key, value in line.items():
+            line[key] = value.strip()
+            if key in FineMgr.params:
+                record[key] = value
+            else:
+                record['meta'][key] = value
+        if 'occur_time' in record:
+            record['occur_time'] = time_util.dateString2timestampCommon(line['occur_time'])
+        if 'bill_id' not in line:
+            errors.append(BatchUploadError(line_index, '缺少异常单号').to_dict())
+            continue
+        crew_id = CrewMgr.get_crew_id_by_account(line['crew_account'])
+        if not crew_id:
+            errors.append(BatchUploadError(line_index, '该员工没有录入系统').to_dict())
+            continue
+        else:
+            record['crew_id'] = crew_id
+        record['meta'] = json.dumps(record['meta'])
+        FineMgr.create_override_if_exist(record)
+    return {'errors': errors, 'lines': lines}
 
 
-def get_fine_records(proj_id, page, filters):
-    data = {'proj_id': proj_id, 'page': page, 'filters': filters}
-    execute_result = execute_proj_plugin(proj_id, proj_nodes.FINE_DATA_OUTPUT, {}, data)
-    if execute_result['status'] != 'ok':
-        return execute_result['data']
-    else:
-        return data
-
-
-def delete_fine_records(proj_id, fine_id):
-    data = {'fine_id': fine_id, 'proj_id': proj_id}
-    execute_result = execute_proj_plugin(proj_id, proj_nodes.FINE_DATA_UPDATE, {}, data)
-    if execute_result['status'] != 'ok':
-        return execute_result['data']
-    else:
-        return data
+def delete_fine_records(fine_id):
+    record = FineMgr.get(fine_id)
+    if record:
+        FineMgr.delete(record)

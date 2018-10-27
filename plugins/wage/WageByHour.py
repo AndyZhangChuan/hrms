@@ -11,11 +11,9 @@ class WageByHour(Plugin):
     __category__    = 'wage'
     __priority__    = 100000
 
-    __desc__ = {
-        constants.WAGE_ON_CALCULATE: '结算时纯按照每小时单价计算',
-    }
+    __desc__ = '工资 = 工时 × 每小时单价'
 
-    unit_price = Props(type='number', default=0, nullable=True, comment='每件单价')
+    unit_price = Props(type='float', default=0.00, nullable=True, comment='小时单价')
 
     @staticmethod
     def wage_on_calculate(props, form, data):

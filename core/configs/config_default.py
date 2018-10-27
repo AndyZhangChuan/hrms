@@ -13,7 +13,7 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     TEMPLATE_FOLDER = root_path + 'resource/templates'
     STATIC_FOLDER = root_path + 'resource/static'
-    UPLOADED_IMAGES_DEST = root_path + 'resource/uploads'
+    UPLOADED_IMAGES_DEST = root_path + 'resource/static/images/'
 
     SQL_PRINT_RATIO = 0
 

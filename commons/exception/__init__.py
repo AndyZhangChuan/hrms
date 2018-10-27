@@ -30,3 +30,16 @@ class NetWorkError(ValueError):
 
     def getMessage(self):
         return {'message': self.message}
+
+
+class BatchUploadError(ValueError):
+    """
+    Raised certain line error when batch upload such as excel upload
+    """
+
+    def __init__(self, line_index, message):
+        self.line_index = line_index
+        self.message = message
+
+    def to_dict(self):
+        return {'message': self.message, 'line_index': self.line_index}

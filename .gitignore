@@ -66,3 +66,4 @@ uploads/
 
 
 test/test_for_dora.py
+resource/static/images/*
