@@ -1,6 +1,6 @@
 # -*- encoding: utf8 -*-
 from commons.helper.db_manager import DBManager
-from dao.models.rights.manager import Manager
+from data.models.rights.manager import Manager
 from sqlalchemy import or_
 
 

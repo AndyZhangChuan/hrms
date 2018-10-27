@@ -5,7 +5,7 @@ import re
 from functools import wraps
 from core import app
 from commons.utils import web_util
-from dao.manager.rights import UserTokenMgr
+from data.manager.rights import UserTokenMgr
 from service.rights import rights_resource_service
 
 

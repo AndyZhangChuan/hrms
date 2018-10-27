@@ -3,12 +3,12 @@
 import json
 import random
 from core import app, redis
-from dao.manager.rights import ManagerMgr
-from dao.manager.rights import UserRightsRoleMapMgr
-from dao.manager.rights import UserRightsRoleMgr
-from dao.manager.rights import UserProjRightsMapMgr
-from dao.manager.rights import UserTokenMgr
-from dao.manager.proj import ProjMgr
+from data.manager.rights import ManagerMgr
+from data.manager.rights import UserRightsRoleMapMgr
+from data.manager.rights import UserRightsRoleMgr
+from data.manager.rights import UserProjRightsMapMgr
+from data.manager.rights import UserTokenMgr
+from data.manager.proj import ProjMgr
 from commons.utils import page_util
 from commons.utils import to_dict
 from commons.utils import md5_utils

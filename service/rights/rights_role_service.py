@@ -1,9 +1,9 @@
 # -*- encoding: utf8 -*-
 
-from dao.manager.rights import UserRightsRoleMgr
-from dao.manager.rights import UserRightsRoleMapMgr
-from dao.manager.rights import UserRoleRightsResourceMapMgr
-from dao.manager.rights import UserRightsResourceMgr
+from data.manager.rights import UserRightsRoleMgr
+from data.manager.rights import UserRightsRoleMapMgr
+from data.manager.rights import UserRoleRightsResourceMapMgr
+from data.manager.rights import UserRightsResourceMgr
 from commons.utils import page_util
 from commons.utils import to_dict
 
