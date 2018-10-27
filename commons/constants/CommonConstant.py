@@ -1,0 +1,4 @@
+# -*- encoding: utf8 -*-
+
+ONE_HOUR_TIMESTAMP = 3600
+ONE_DAY_TIMESTAMP = 86400

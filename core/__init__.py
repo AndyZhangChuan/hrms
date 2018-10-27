@@ -12,6 +12,9 @@ from configs import config
 from core.db.router import AutoRouteSQLAlchemy
 from core.dapper.intercept import XB3HTTPAdapter
 from core.log import getLogger
+from redis import Redis
+
+from core.hrms_redis.hrms_redis import RedisEntity
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -63,6 +66,13 @@ def init_file_handler():
     log.info("init file_handler done")
 
 
+def init_redis_servers(_app):
+    redis_connection = Redis(host=app.config['REDIS_SERVER_HOST'], port=_app.config['REDIS_SERVER_PORT'],
+                             db=_app.config["REDIS_DATABASE_INDEX"], socket_timeout=_app.config["REDIS_SOCKET_TIMEOUT"],
+                             retry_on_timeout=True)
+    return [redis_connection]
+
+
 # init app
 app = create_app()
 
@@ -80,6 +90,9 @@ config_file_uploads()
 
 # init file handler
 init_file_handler()
+
+# init redis servers
+redis = RedisEntity(init_redis_servers(app))
 
 
 from inspect import getmembers, isclass

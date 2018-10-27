@@ -11,5 +11,13 @@ class ProjManager(DBManager):
         super(DBManager, self).__init__()
         self.model = Proj
         self.params = self.get_editable_fields()
-        self.gen_params = ['logo_url', 'intro_list_pics']
 
+    def update_proj_by_id(self, proj_id, params):
+        proj = self.get(proj_id)
+        if proj is None:
+            return None
+        return self.update(proj, **params)
+
+    def get_proj_by_ids(self, proj_ids):
+        expressions = [self.model.id.in_(proj_ids)]
+        return self.query(expressions=expressions)

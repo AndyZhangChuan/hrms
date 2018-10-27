@@ -28,8 +28,11 @@ def get_page_result(model, page=1, page_size=10, expressions=list(), order_by_li
 
 def __do_query(model, page=1, page_size=10, expressions=[], order_by_list=[]):
     count = db.session.query(func.count(model.id)).filter(*expressions).scalar()
-    page_floor = int(math.ceil(count / page_size))
-    total_page = page_floor if count % page_size == 0 else page_floor + 1
+    if page_size != 0:
+        page_floor = int(math.ceil(count / page_size))
+        total_page = page_floor if count % page_size == 0 else page_floor + 1
+    else:
+        total_page = 1 if count > 0 else 0
 
     page_query = db.session.query(model.id).filter(*expressions).order_by(model.id.desc())
     if page_size != 0:

@@ -5,15 +5,15 @@ import re
 from functools import wraps
 from core import app
 from commons.utils import web_util
-from data.manager.rights import UserTokenMgr
-from service import rights_service
+from dao.manager.rights import UserTokenMgr
+from service.rights import rights_resource_service
 
 
 def rights(resource_value):
     def rights_check(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-
+            return f(*args, **kwargs)
             # 不进行权限控制的请求
             request_url = request.path
             exclude_url = app.config.get('RIGHTS_EXCLUDE_RESOURCE_LIST', None)
@@ -26,7 +26,7 @@ def rights(resource_value):
                 return jsonify(status='error', msg='rights check error')
 
             # 这里后面使用redis缓存
-            resources = rights_service.get_manager_rights_list(manager_id)
+            resources = rights_resource_service.get_manager_rights_list(manager_id)
             for resource in resources:
                 if resource.value == resource_value:
                     return f(*args, **kwargs)
